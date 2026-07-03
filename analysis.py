@@ -1,37 +1,45 @@
 import pandas as pd
-df = pd.read_csv("data/netflix_titles.csv")
+import matplotlib.pyplot as plt
 
-"""print("=" * 50)
-print("Netflix Dataset")
-print("=" * 50)
 
-print("\n Dataset shape: ")
-print(df.shape)
+def load_data():
+    """Load the Netflix dataset."""
+    df = pd.read_csv("data/netflix_titles.csv")
+    return df
 
-print("\n First 5 rows: ")
-print(df.head(5))
 
-print("\n Column names: ")
-print(df.columns.tolist())
+def clean_data(df):
+    """Clean missing values."""
+    clean_df = df.copy()
 
-print("\n Dataset Information: ")
-print(df.info())
+    clean_df["director"] = clean_df["director"].fillna("Unknown")
+    clean_df["cast"] = clean_df["cast"].fillna("Unknown")
+    clean_df["country"] = clean_df["country"].fillna("Unknown")
+    clean_df["rating"] = clean_df["rating"].fillna("Not Rated")
 
-print("\n Missing values: ")
-print(df.isnull().sum())
+    clean_df = clean_df.dropna(subset=["date_added", "duration"])
 
-print("\n Duplicate rows: ")
-print(df.duplicated().sum())"""
+    return clean_df
 
-# Create a copy for cleaning
-clean_df = df.copy()
+def plot_content_type(clean_df):
+    type_counts = clean_df["type"].value_counts()
 
-clean_df['director'] = clean_df['director'].fillna("Unknown")
-clean_df['cast'] = clean_df['cast'].fillna("Unknown")
-clean_df['country'] = clean_df['country'].fillna("Unknown")
-clean_df['rating'] = clean_df['rating'].fillna("Not rated")
+    print(type_counts)
 
-clean_df = clean_df.dropna(subset=['date_added', 'duration'])
+    plt.figure(figsize = (6, 4))
+    plt.bar(type_counts.index, type_counts.values)
+    plt.title("TV Shows vs Movies on Netflix")
+    plt.xlabel("Content type")
+    plt.ylabel("Number of titles")
+    plt.tight_layout()
+    plt.savefig("images/charts/movies_vs_tvshows.png")
+    plt.show()
 
-print("\n Missing values after CleanUp: ")
-print(clean_df.isnull().sum())
+def main():
+    df = load_data()
+    clean_df = clean_data(df)
+    plot_content_type(clean_df)
+
+
+if __name__ == "__main__":
+    main()
