@@ -35,10 +35,35 @@ def plot_content_type(clean_df):
     plt.savefig("images/charts/movies_vs_tvshows.png")
     plt.show()
 
+def analyze_release_year(clean_df):
+    release_year_counts = (clean_df.groupby("release_year").size().sort_index())
+    print("\n Content released by year: ")
+    print(release_year_counts.tail(10))
+
+def plot_release_year(clean_df):
+    release_year_counts = (clean_df.groupby("release_year").size().sort_index())
+
+    plt.figure(figsize = (10, 5))
+    plt.plot(release_year_counts.index, release_year_counts.values, marker = "o", linewidth = 2)
+
+    plt.title("Netflix Content Released By Year")
+    plt.xlabel("Release Year")
+    plt.ylabel("Number of Titles")
+
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig("images/charts/content_by_release_year.png")
+
+    plt.show()
+
+
+
 def main():
     df = load_data()
     clean_df = clean_data(df)
     plot_content_type(clean_df)
+    analyze_release_year(clean_df)
+    plot_release_year(clean_df)
 
 
 if __name__ == "__main__":
