@@ -56,15 +56,54 @@ def plot_release_year(clean_df):
 
     plt.show()
 
+def analyze_countries(clean_df):
 
+    print("\n First 10 country values: ")
+    print(clean_df['country'].head(10))
+
+def transform_countries(clean_df):
+
+    country_df = clean_df.copy()
+
+    country_df["country"] = country_df["country"].str.split(",")
+    country_df = country_df.explode("country")
+    country_df["country"] = country_df["country"].str.strip()
+
+    return country_df
+
+def plot_top_countries(country_df):
+
+    country_counts = (country_df[country_df["country"] != "Unknown"]
+    ["country"].value_counts().head(10))
+
+    print("\n Top 10 countries: ")
+    print(country_counts)
+    plt.figure(figsize = (10, 6))
+    plt.bar(country_counts.index, country_counts.values)
+    plt.title("Top 10 Countries Producing Netflix Content")
+    plt.xlabel("Country")
+    plt.ylabel("Number of Titles")
+
+    plt.xticks(rotation = 45, ha = "right")
+    plt.grid(axis = "y", linestyle = "--", alpha = 0.6)
+
+    plt.tight_layout()
+
+    plt.savefig("images/charts/top_10_countries.png")
+
+    plt.show()
 
 def main():
     df = load_data()
     clean_df = clean_data(df)
     plot_content_type(clean_df)
+
     analyze_release_year(clean_df)
     plot_release_year(clean_df)
 
+    analyze_countries(clean_df)
+    country_df = transform_countries(clean_df)
+    plot_top_countries(country_df)
 
 if __name__ == "__main__":
     main()
