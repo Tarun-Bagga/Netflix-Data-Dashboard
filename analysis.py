@@ -85,11 +85,47 @@ def plot_top_countries(country_df):
     plt.ylabel("Number of Titles")
 
     plt.xticks(rotation = 45, ha = "right")
-    plt.grid(axis = "y", linestyle = "--", alpha = 0.6)
+    plt.grid(axis = "y", linestyle = "--", alpha = 0.6, color = 'hotpink')
 
     plt.tight_layout()
 
     plt.savefig("images/charts/top_10_countries.png")
+
+    plt.show()
+
+def analyze_genres(clean_df):
+    print("\n First 10 genres values: ")
+    print(clean_df["listed_in"].head(10))
+
+def transform_genres(clean_df):
+
+    genre_df = clean_df.copy()
+
+    genre_df["listed_in"] = genre_df["listed_in"].str.split(",")
+    genre_df = genre_df.explode("listed_in")
+    genre_df["listed_in"] = genre_df["listed_in"].str.strip()
+
+    return genre_df
+
+def plot_top_genres(genre_df):
+
+    genre_counts = genre_df["listed_in"].value_counts().head(10)
+
+    print("\n Top 10 genres: ")
+    print(genre_counts)
+
+    plt.figure(figsize = (10, 6))
+    plt.bar(genre_counts.index, genre_counts.values)
+    plt.title("Top 10 Genres On Netflix")
+    plt.xlabel("Genre")
+    plt.ylabel("Number of Titles")
+
+    plt.xticks(rotation = 45, ha = "right")
+    plt.grid(axis = "y", linestyle = "--", alpha = 0.6, color = 'red')
+
+    plt.tight_layout()
+
+    plt.savefig("images/charts/top_10_genres.png")
 
     plt.show()
 
@@ -104,6 +140,12 @@ def main():
     analyze_countries(clean_df)
     country_df = transform_countries(clean_df)
     plot_top_countries(country_df)
+
+    analyze_genres(clean_df)
+    transform_genres(clean_df)
+    genre_df = transform_genres(clean_df)
+    plot_top_genres(genre_df)
+
 
 if __name__ == "__main__":
     main()
