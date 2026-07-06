@@ -129,6 +129,32 @@ def plot_top_genres(genre_df):
 
     plt.show()
 
+def analyze_ratings(clean_df):
+
+    print("\n First 10 rating values: ")
+    print(clean_df["rating"].head(10))
+
+def plot_ratings(clean_df):
+    rating_counts = clean_df["rating"].value_counts()
+
+    print("\n Rating Distribution On Netflix: ")
+    print(rating_counts)
+
+    plt.figure(figsize = (10, 6))
+    plt.bar(rating_counts.index, rating_counts.values)
+    plt.bar(rating_counts.index, rating_counts.values)
+    plt.title("Rating Distribution")
+
+    plt.xlabel("Rating")
+    plt.ylabel("Number of Titles")
+    plt.xticks(rotation = 45, ha = "right")
+    plt.grid(axis = "y", linestyle = "--", alpha = 0.6)
+
+    plt.tight_layout()
+    plt.savefig("images/charts/rating_distribution.png")
+
+    plt.show()
+
 def main():
     df = load_data()
     clean_df = clean_data(df)
@@ -146,6 +172,8 @@ def main():
     genre_df = transform_genres(clean_df)
     plot_top_genres(genre_df)
 
+    analyze_ratings(clean_df)
+    plot_ratings(clean_df)
 
 if __name__ == "__main__":
     main()
