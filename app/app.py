@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 
-
 st.set_page_config(
     page_title="Netflix Data Dashboard",
     page_icon="🎬",
@@ -11,8 +10,7 @@ st.set_page_config(
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/netflix_titles.csv")
-    return df
+    return pd.read_csv("data/netflix_titles.csv")
 
 
 @st.cache_data
@@ -29,37 +27,79 @@ def clean_data(df):
     return clean_df
 
 
+# -----------------------------
+# Load Data
+# -----------------------------
 df = load_data()
 clean_df = clean_data(df)
 
 
+# -----------------------------
+# Title
+# -----------------------------
 st.title("🎬 Netflix Data Dashboard")
 st.markdown("Analyze Netflix movies and TV shows using interactive visualizations.")
 
 
+# -----------------------------
+# Sidebar Filters
+# -----------------------------
 st.sidebar.header("Filters")
 
 content_type = st.sidebar.selectbox(
     "Select Content Type",
-    ["All", "Movie", "TV Show"]   # <-- FIXED
+    ["All", "Movie", "TV Show"]
+)
+
+country_list = (
+    clean_df["country"]
+    .str.split(",")
+    .explode()
+    .str.strip()
+    .drop_duplicates()
+    .sort_values()
+    .tolist()
+)
+
+country_list.insert(0, "All Countries")
+
+selected_country = st.sidebar.selectbox(
+    "Select Country",
+    country_list
 )
 
 
+# -----------------------------
+# Apply Filters
+# -----------------------------
 filtered_df = clean_df.copy()
 
 if content_type != "All":
-    filtered_df = filtered_df[filtered_df["type"] == content_type]
+    filtered_df = filtered_df[
+        filtered_df["type"] == content_type
+    ]
+
+if selected_country != "All Countries":
+    filtered_df = filtered_df[
+        filtered_df["country"].str.contains(
+            selected_country,
+            case=False,
+            na=False
+        )
+    ]
 
 
+# -----------------------------
+# KPI Metrics
+# -----------------------------
 total_titles = len(filtered_df)
 
-movies = len(filtered_df[filtered_df["type"] == "Movie"])
+movies = (filtered_df["type"] == "Movie").sum()
 
-tv_shows = len(filtered_df[filtered_df["type"] == "TV Show"])
+tv_shows = (filtered_df["type"] == "TV Show").sum()
 
 countries = (
     filtered_df["country"]
-    .dropna()
     .str.split(",")
     .explode()
     .str.strip()
@@ -67,22 +107,22 @@ countries = (
 )
 
 
+# -----------------------------
+# KPI Cards
+# -----------------------------
 col1, col2, col3, col4 = st.columns(4)
 
-with col1:
-    st.metric("Total Titles", total_titles)
-
-with col2:
-    st.metric("Movies", movies)
-
-with col3:
-    st.metric("TV Shows", tv_shows)
-
-with col4:
-    st.metric("Countries", countries)
+col1.metric("Total Titles", total_titles)
+col2.metric("Movies", movies)
+col3.metric("TV Shows", tv_shows)
+col4.metric("Countries", countries)
 
 
+# -----------------------------
+# Dataset Preview
+# -----------------------------
 st.divider()
 
 st.subheader("Dataset Preview")
-st.dataframe(filtered_df)
+
+st.dataframe(filtered_df, use_container_width=True)
