@@ -68,6 +68,13 @@ selected_country = st.sidebar.selectbox(
     country_list
 )
 
+min_year = int(clean_df["release_year"].min())
+max_year = int(clean_df["release_year"].max())
+
+selected_year = st.sidebar.slider("Select Release Year",
+                                  min_value = min_year,
+                                  max_value = max_year,
+                                  value = (min_year,max_year))
 
 # -----------------------------
 # Apply Filters
@@ -88,6 +95,10 @@ if selected_country != "All Countries":
         )
     ]
 
+filtered_df = filtered_df[
+    (filtered_df["release_year"] >= selected_year[0]) &
+    (filtered_df["release_year"] <= selected_year[1])
+]
 
 # -----------------------------
 # KPI Metrics
