@@ -191,6 +191,56 @@ with (col2):
         use_container_width=True
     )
 
+st.divider()
+
+col3, col4 = st.columns(2)
+
+with col3:
+    st.subheader("Top 10 Countries")
+    country_df = filtered_df['country'].str.split(",").explode().str.strip()
+
+    country_counts = country_df.value_counts().head(10).reset_index()
+    country_counts.columns = ["Country", "Titles"]
+
+    fig = px.bar(country_counts, x = "Titles", y = "Country",
+                 orientation = "h",
+                 color = "Titles",
+                 text = "Titles",
+                 title = "Top 10 Countries")
+    fig.update_layout(
+        yaxis = dict(categoryorder="total ascending",),
+        showlegend=False,
+        xaxis_title = "Titles",
+        yaxis_title = ""
+    )
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
+
+with col4:
+    st.subheader("Top 10 Genres")
+    genres_df = filtered_df['listed_in'].str.split(",").explode().str.strip()
+
+    genre_counts = genres_df.value_counts().head(10).reset_index()
+    genre_counts.columns = ["Genre", "Titles"]
+
+    fig = px.bar(genre_counts, x="Titles", y="Genre",
+                 orientation="h",
+                 color="Titles",
+                 text="Titles",
+                 title="Top 10 Genre")
+    fig.update_layout(
+        yaxis=dict(categoryorder="total ascending", ),
+        showlegend=False,
+        xaxis_title="Titles",
+        yaxis_title=""
+    )
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
+
 # -----------------------------
 # Dataset Preview
 # -----------------------------
