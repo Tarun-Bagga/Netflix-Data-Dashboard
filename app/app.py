@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from scipy.conftest import xp_available_backends
 
 st.set_page_config(
     page_title="Netflix Data Dashboard",
@@ -236,6 +237,54 @@ with col4:
         xaxis_title="Titles",
         yaxis_title=""
     )
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
+
+st.divider()
+col5, col6 = st.columns(2)
+
+with col5:
+    st.subheader("Rating Distribution")
+    rating_counts = filtered_df['rating'].value_counts().reset_index()
+
+    rating_counts.columns = ["Rating", "Titles"]
+
+    fig = px.bar(rating_counts, x="Titles", y="Rating",
+                 orientation="h",
+                 color="Titles",
+                 text="Titles",
+                 title = "Netflix Rating Distribution")
+
+    fig.update_layout(
+        showlegend=False,
+        xaxis_title="Titles",
+        yaxis_title=""
+    )
+    fig.update_traces(textposition="outside")
+
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
+
+with col6:
+    st.subheader("Movie Duration Distribution")
+
+    movie_df = filtered_df[filtered_df["type"] == "Movie"].copy()
+
+    movie_df['duration'] = (movie_df['duration']
+                            .str.replace(" min", "",regex = False)
+                            .astype(int))
+    fig = px.histogram(movie_df, x="duration", nbins=30,
+                       title = "Movie Duration Distribution")
+
+    fig.update_layout(
+        xaxis_title="Duration (Minutes)",
+        yaxis_title="Number of Movies",
+    )
+
     st.plotly_chart(
         fig,
         use_container_width=True
