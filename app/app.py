@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 
 st.set_page_config(
     page_title="Netflix Data Dashboard",
@@ -76,6 +77,14 @@ selected_year = st.sidebar.slider("Select Release Year",
                                   max_value = max_year,
                                   value = (min_year,max_year))
 
+st.sidebar.subheader("Ratings")
+rating_list = sorted(clean_df["rating"].unique())
+
+selected_ratings = []
+for rating in rating_list:
+    if st.sidebar.checkbox(rating, value=True):
+        selected_ratings.append(rating)
+
 # -----------------------------
 # Apply Filters
 # -----------------------------
@@ -95,10 +104,12 @@ if selected_country != "All Countries":
         )
     ]
 
-filtered_df = filtered_df[
-    (filtered_df["release_year"] >= selected_year[0]) &
-    (filtered_df["release_year"] <= selected_year[1])
-]
+if selected_ratings:
+    filtered_df = filtered_df[
+        filtered_df["rating"].isin(selected_ratings)
+    ]
+else:
+    filtered_df = filtered_df.iloc[0:0]
 
 # -----------------------------
 # KPI Metrics
@@ -128,6 +139,32 @@ col2.metric("Movies", movies)
 col3.metric("TV Shows", tv_shows)
 col4.metric("Countries", countries)
 
+#------------------------------
+# Plotting
+#------------------------------
+
+st.divider()
+st.subheader("Movies vs TV Shows")
+
+type_counts = filtered_df["type"].value_counts().reset_index()
+type_counts.columns = ["Content Type", "Count"]
+
+fig = px.bar(type_counts, x = "Content Type", y = "Count",
+             color = "Content Type",
+             text = "Count",
+             title = "Movies vs TV Shows")
+fig.update_layout(
+    showlegend=False,
+    xaxis_title="Content Type",
+    yaxis_title="Number of Titles"
+)
+
+fig.update_traces(textposition="outside")
+
+st.plotly_chart(
+    fig,
+    use_container_width=True
+)
 
 # -----------------------------
 # Dataset Preview
