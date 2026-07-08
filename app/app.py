@@ -144,27 +144,52 @@ col4.metric("Countries", countries)
 #------------------------------
 
 st.divider()
-st.subheader("Movies vs TV Shows")
 
-type_counts = filtered_df["type"].value_counts().reset_index()
-type_counts.columns = ["Content Type", "Count"]
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("Movies vs TV Shows")
 
-fig = px.bar(type_counts, x = "Content Type", y = "Count",
-             color = "Content Type",
-             text = "Count",
-             title = "Movies vs TV Shows")
-fig.update_layout(
-    showlegend=False,
-    xaxis_title="Content Type",
-    yaxis_title="Number of Titles"
-)
+    type_counts = filtered_df["type"].value_counts().reset_index()
+    type_counts.columns = ["Content Type", "Count"]
 
-fig.update_traces(textposition="outside")
+    fig = px.bar(type_counts, x = "Content Type", y = "Count",
+                 color = "Content Type",
+                 text = "Count",
+                 title = "Movies vs TV Shows")
+    fig.update_layout(
+        showlegend=False,
+        xaxis_title="Content Type",
+        yaxis_title="Number of Titles"
+    )
 
-st.plotly_chart(
-    fig,
-    use_container_width=True
-)
+    fig.update_traces(textposition="outside")
+
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
+
+with (col2):
+    st.subheader("Release Year Trend")
+    yearly_titles = filtered_df.groupby('release_year'
+                                        ).size().reset_index(name = "Count")
+    fig = px.line(
+        yearly_titles,
+        x="release_year",
+        y="Count",
+        markers=True,
+        title="Titles Released Per Year"
+    )
+
+    fig.update_layout(
+        xaxis_title="Release Year",
+        yaxis_title="Number of Titles"
+    )
+
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
 
 # -----------------------------
 # Dataset Preview
