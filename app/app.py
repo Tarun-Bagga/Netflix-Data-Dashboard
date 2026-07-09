@@ -40,18 +40,26 @@ clean_df = clean_data(df)
 # Title
 # -----------------------------
 st.title("🎬 Netflix Data Dashboard")
-st.markdown("Analyze Netflix movies and TV shows using interactive visualizations.")
+st.markdown("Interactive dashboard for exploring Netflix movies and TV shows.")
 
 
 # -----------------------------
 # Sidebar Filters
 # -----------------------------
-st.sidebar.header("Filters")
+st.sidebar.title("🎛 Dashboard Filters")
 
+st.sidebar.divider()
+
+search_title = st.sidebar.text_input("🔍 Search Title",
+                                     placeholder = "Search By Title...")
+
+st.divider()
 content_type = st.sidebar.selectbox(
     "Select Content Type",
     ["All", "Movie", "TV Show"]
 )
+
+st.sidebar.divider()
 
 country_list = (
     clean_df["country"]
@@ -70,6 +78,8 @@ selected_country = st.sidebar.selectbox(
     country_list
 )
 
+st.sidebar.divider()
+
 min_year = int(clean_df["release_year"].min())
 max_year = int(clean_df["release_year"].max())
 
@@ -78,6 +88,8 @@ selected_year = st.sidebar.slider("Select Release Year",
                                   max_value = max_year,
                                   value = (min_year,max_year))
 
+st.sidebar.divider()
+
 st.sidebar.subheader("Ratings")
 rating_list = sorted(clean_df["rating"].unique())
 
@@ -85,6 +97,7 @@ selected_ratings = []
 for rating in rating_list:
     if st.sidebar.checkbox(rating, value=True):
         selected_ratings.append(rating)
+
 
 # -----------------------------
 # Apply Filters
@@ -129,16 +142,24 @@ countries = (
     .nunique()
 )
 
+if search_title:
+    filtered_df = filtered_df[filtered_df['title']
+                    .str.contains(search_title,
+                    case=False,
+                    na=False)
+    ]
+    st.write(f"Rows found: {len(filtered_df)}")
+    st.write(filtered_df[["title"]].head(20))
 
 # -----------------------------
 # KPI Cards
 # -----------------------------
 col1, col2, col3, col4 = st.columns(4)
 
-col1.metric("Total Titles", total_titles)
-col2.metric("Movies", movies)
-col3.metric("TV Shows", tv_shows)
-col4.metric("Countries", countries)
+col1.metric("Total Titles", f"{total_titles:,}")
+col2.metric("Movies", f"{movies:,}")
+col3.metric("TV Shows", f"{tv_shows:,}")
+col4.metric("Countries", f"{countries:,}")
 
 #------------------------------
 # Plotting
@@ -156,8 +177,9 @@ with col1:
     fig = px.bar(type_counts, x = "Content Type", y = "Count",
                  color = "Content Type",
                  text = "Count",
-                 title = "Movies vs TV Shows")
+                 color_discrete_sequence=["#E50914"])
     fig.update_layout(
+        height=500,
         showlegend=False,
         xaxis_title="Content Type",
         yaxis_title="Number of Titles"
@@ -167,29 +189,40 @@ with col1:
 
     st.plotly_chart(
         fig,
-        use_container_width=True
+        use_container_width=True,
+        config={
+            "displayModeBar": False
+        }
     )
 
 with (col2):
-    st.subheader("Release Year Trend")
+    st.subheader("Titles Released Per Year")
     yearly_titles = filtered_df.groupby('release_year'
                                         ).size().reset_index(name = "Count")
     fig = px.line(
         yearly_titles,
         x="release_year",
         y="Count",
-        markers=True,
-        title="Titles Released Per Year"
+        markers=True
     )
 
     fig.update_layout(
+        height=500,
         xaxis_title="Release Year",
         yaxis_title="Number of Titles"
     )
 
+    fig.update_traces(
+        line_color="#E50914",
+        marker_color="#E50914"
+    )
+
     st.plotly_chart(
         fig,
-        use_container_width=True
+        use_container_width=True,
+        config={
+            "displayModeBar": False
+        }
     )
 
 st.divider()
@@ -205,10 +238,10 @@ with col3:
 
     fig = px.bar(country_counts, x = "Titles", y = "Country",
                  orientation = "h",
-                 color = "Titles",
                  text = "Titles",
-                 title = "Top 10 Countries")
+                 color_discrete_sequence=["#E50914"])
     fig.update_layout(
+        height=500,
         yaxis = dict(categoryorder="total ascending",),
         showlegend=False,
         xaxis_title = "Titles",
@@ -216,7 +249,10 @@ with col3:
     )
     st.plotly_chart(
         fig,
-        use_container_width=True
+        use_container_width=True,
+        config={
+            "displayModeBar": False
+        }
     )
 
 with col4:
@@ -228,10 +264,11 @@ with col4:
 
     fig = px.bar(genre_counts, x="Titles", y="Genre",
                  orientation="h",
-                 color="Titles",
                  text="Titles",
-                 title="Top 10 Genre")
+                 color_discrete_sequence=["#E50914"])
+
     fig.update_layout(
+        height=500,
         yaxis=dict(categoryorder="total ascending", ),
         showlegend=False,
         xaxis_title="Titles",
@@ -239,7 +276,10 @@ with col4:
     )
     st.plotly_chart(
         fig,
-        use_container_width=True
+        use_container_width=True,
+        config={
+            "displayModeBar": False
+        }
     )
 
 st.divider()
@@ -253,11 +293,11 @@ with col5:
 
     fig = px.bar(rating_counts, x="Titles", y="Rating",
                  orientation="h",
-                 color="Titles",
                  text="Titles",
-                 title = "Netflix Rating Distribution")
+                 color_discrete_sequence=["#E50914"])
 
     fig.update_layout(
+        height=500,
         showlegend=False,
         xaxis_title="Titles",
         yaxis_title=""
@@ -266,7 +306,10 @@ with col5:
 
     st.plotly_chart(
         fig,
-        use_container_width=True
+        use_container_width=True,
+        config={
+            "displayModeBar": False
+        }
     )
 
 with col6:
@@ -277,24 +320,49 @@ with col6:
     movie_df['duration'] = (movie_df['duration']
                             .str.replace(" min", "",regex = False)
                             .astype(int))
-    fig = px.histogram(movie_df, x="duration", nbins=30,
-                       title = "Movie Duration Distribution")
+    fig = px.histogram(movie_df, x="duration", nbins=30, color_discrete_sequence=["#E50914"])
 
     fig.update_layout(
+        height=500,
         xaxis_title="Duration (Minutes)",
-        yaxis_title="Number of Movies",
+        yaxis_title="Number of Movies"
     )
 
     st.plotly_chart(
         fig,
-        use_container_width=True
+        use_container_width=True,
+        config={
+            "displayModeBar": False
+        }
     )
+
+st.divider()
+
+st.download_button(
+    label = "📥 Download Filtered Dataset (CSV)",
+    data = filtered_df.to_csv(index = False),
+    file_name = "filtered_netflix_data.csv",
+    mime = "text/csv",
+)
 
 # -----------------------------
 # Dataset Preview
 # -----------------------------
 st.divider()
 
-st.subheader("Dataset Preview")
+st.subheader("📋 Filtered Dataset")
 
-st.dataframe(filtered_df, use_container_width=True)
+st.caption(
+    f"Showing {len(filtered_df):,} titles"
+)
+
+st.divider()
+
+st.markdown(
+    """
+    <center>
+        Built with ❤️ using Streamlit, Pandas & Plotly
+    </center>
+    """,
+    unsafe_allow_html=True
+)
