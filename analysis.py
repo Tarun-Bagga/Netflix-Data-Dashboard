@@ -1,8 +1,27 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 
-from utils.data_utils import load_data, clean_data
+def load_data():
+    return pd.read_csv("data/netflix_titles.csv")
 
-"""def plot_content_type(clean_df):
+
+def clean_data(df):
+    clean_df = df.copy()
+
+    clean_df["director"] = clean_df["director"].fillna("Unknown")
+    clean_df["cast"] = clean_df["cast"].fillna("Unknown")
+    clean_df["country"] = clean_df["country"].fillna("Unknown")
+    clean_df["rating"] = clean_df["rating"].fillna("Not Rated")
+
+    clean_df = clean_df.dropna(subset=["date_added", "duration"])
+
+    return clean_df
+
+# Load Data
+df = load_data()
+clean_df = clean_data(df)
+
+def plot_content_type(clean_df):
     type_counts = clean_df["type"].value_counts()
 
     print(type_counts)
@@ -134,7 +153,7 @@ def plot_ratings(clean_df):
     plt.tight_layout()
     plt.savefig("images/charts/rating_distribution.png")
 
-    plt.show()"""
+    plt.show()
 
 def analyze_duration(clean_df):
 
@@ -187,7 +206,7 @@ def plot_movie_duration(movie_df):
 def main():
     df = load_data()
     clean_df = clean_data(df)
-    """plot_content_type(clean_df)
+    plot_content_type(clean_df)
 
     analyze_release_year(clean_df)
     plot_release_year(clean_df)
@@ -202,7 +221,7 @@ def main():
     plot_top_genres(genre_df)
 
     analyze_ratings(clean_df)
-    plot_ratings(clean_df)"""
+    plot_ratings(clean_df)
 
     analyze_duration(clean_df)
     movie_df = transform_movies_duration(clean_df)
