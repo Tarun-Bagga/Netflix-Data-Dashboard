@@ -176,10 +176,9 @@ with col1:
             "displayModeBar": False}
     )
 
-with (col2):
+with col2:
     st.subheader("Netflix Releases Over Time")
-    yearly_titles = filtered_df.groupby('release_year'
-                                        ).size().reset_index(name = "Count")
+    yearly_titles = filtered_df.groupby('release_year').size().reset_index(name = "Count")
     fig = px.line(
         yearly_titles,
         x="release_year",

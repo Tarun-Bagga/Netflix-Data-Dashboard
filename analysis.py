@@ -4,7 +4,6 @@ import pandas as pd
 def load_data():
     return pd.read_csv("data/netflix_titles.csv")
 
-
 def clean_data(df):
     clean_df = df.copy()
 
@@ -36,7 +35,7 @@ def plot_content_type(clean_df):
     plt.show()
 
 def analyze_release_year(clean_df):
-    release_year_counts = (clean_df.groupby("release_year").size().sort_index())
+    release_year_counts = clean_df.groupby("release_year").size().sort_index()
     print("\n Content released by year: ")
     print(release_year_counts.tail(10))
 
