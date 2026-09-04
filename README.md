@@ -1,193 +1,107 @@
-# 🎬 Netflix Data Dashboard
+# Netflix Data Dashboard
 
-An interactive data analytics dashboard built with **Python**, **Pandas**, **Plotly**, and **Streamlit** to explore and analyze the Netflix Movies & TV Shows dataset.
+An interactive analytics dashboard exploring Netflix's global content catalog — built with Python, Pandas, and Plotly, deployed via Streamlit.
 
-The dashboard allows users to filter, search, visualize, and download Netflix content through an intuitive and responsive web interface.
+**Live app:** https://netflix--data--dashboard.streamlit.app
 
----
+**Repo:** https://github.com/Tarun-Bagga/Netflix-Data-Dashboard
 
-## 🚀 Live Demo
+## What it does
 
-🔗 **Live Application:** https://netflix--data--dashboard.streamlit.app
+Analyzes **8,800+ Netflix titles across 190+ countries**, letting users filter by content type, country, release year, and rating, search titles instantly, and export the filtered results as CSV.
 
-🔗 **GitHub Repository:** https://github.com/Tarun-Bagga/Netflix-Data-Dashboard
+## Preview
 
----
-
-# 📸 Dashboard Preview
-
-## Home Dashboard
-
+**Home Dashboard**
 ![Dashboard Home](screenshots/01_dashboard_home.png)
 
----
-
-## Other Features
-
+**Additional Charts**
 ![Other Features](screenshots/02_dashboard_other_charts.png)
 
----
-
-## Interactive Filters
-
+**Interactive Filters**
 ![Dashboard Filters](screenshots/03_dashboard_filters.png)
 
----
-
-## Results From Search & Download Filtered Dataset
-
+**Search & Download**
 ![Results & Download Button](screenshots/04_dashboard_search_&_download.png)
 
----
+## Visualizations included
 
-# ✨ Features
+- Content type distribution (Movies vs TV Shows)
+- Netflix releases over time
+- Top 10 countries by content volume
+- Top 10 genres
+- Content rating distribution
+- Movie runtime distribution
 
-- 📊 Interactive KPI Cards
-- 🎬 Content Type Filtering
-- 🌍 Country Filtering
-- 📅 Release Year Range Slider
-- ⭐ Rating Selection
-- 🔍 Search Titles Instantly
-- 📈 Interactive Plotly Visualizations
-- 📥 Download Filtered Dataset as CSV
-- 📋 Filtered Dataset Preview
-- 📱 Responsive Dashboard Layout
+## Features
 
----
+- Interactive KPI cards
+- Content type / country / release year / rating filters
+- Instant title search
+- Interactive Plotly charts
+- Filtered dataset download (CSV)
+- Responsive layout
 
-# 📊 Dashboard Visualizations
-
-The dashboard includes six interactive visualizations:
-
-- Content Distribution
-- Netflix Releases Over Time
-- Top 10 Countries by Content
-- Top 10 Genres
-- Content Rating Distribution
-- Movie Runtime Distribution
-
----
-
-# 🛠 Tech Stack
+## Tech stack
 
 | Technology | Purpose |
 |------------|---------|
-| Python | Programming Language |
-| Pandas | Data Cleaning & Analysis |
-| Plotly Express | Interactive Visualizations |
-| Streamlit | Dashboard Development |
-| Git | Version Control |
-| GitHub | Project Hosting |
+| Python | Core language |
+| Pandas | Data cleaning & analysis |
+| Plotly Express | Interactive visualizations |
+| Streamlit | Dashboard framework |
 
----
-
-# 📂 Project Structure
+## Project structure
 
 ```text
 Netflix-Data-Dashboard/
-│
 ├── app.py
 ├── analysis.py
 ├── requirements.txt
 ├── README.md
 ├── .gitignore
-│
 ├── data/
 │   └── netflix_titles.csv
-│
 ├── images/
 │   └── charts/
-│
 └── screenshots/
     ├── 01_dashboard_home.png
     ├── 02_dashboard_other_charts.png
     ├── 03_dashboard_filters.png
     └── 04_dashboard_search_&_download.png
-   
-
----
-
-# 📥 Installation
-
-Clone the repository:
-
-```bash
-git clone  https://github.com/Tarun-Bagga/Netflix-Data-Dashboard.git
 ```
 
-Navigate into the project:
+## Installation
 
 ```bash
+git clone https://github.com/Tarun-Bagga/Netflix-Data-Dashboard.git
 cd Netflix-Data-Dashboard
-```
-
-Install the required packages:
-
-```bash
 pip install -r requirements.txt
-```
-
-Run the Streamlit application:
-
-```bash
 streamlit run app.py
 ```
 
----
+## Dataset
 
-# 📁 Dataset
+Netflix Movies and TV Shows dataset — title, type, director, cast, country, release year, rating, duration, and genre for each entry.
 
-This project uses the **Netflix Movies and TV Shows** dataset.
+## What this demonstrates
 
-Dataset includes information such as:
+- Data cleaning and transformation on a real, messy public dataset
+- Exploratory data analysis and multi-dimensional filtering logic
+- Interactive dashboard design and deployment
 
-- Title
-- Type
-- Director
-- Cast
-- Country
-- Release Year
-- Rating
-- Duration
-- Genre
+## Limitations
 
----
+- Pure exploratory tool — no predictive or recommendation component, by design.
+- Dataset is a static snapshot; doesn't reflect Netflix's current catalog in real time.
 
-# 📈 Learning Outcomes
+## Future improvements
 
-This project helped me gain practical experience in:
+- Director/cast-level analytics
+- Content recommendation system
+- World map visualization by country
+- Advanced search and sorting
 
-- Data Cleaning
-- Data Transformation
-- Exploratory Data Analysis (EDA)
-- Interactive Dashboard Development
-- Data Visualization
-- Git & GitHub Workflow
-- Streamlit Deployment
+## Author
 
----
-
-# 🔮 Future Improvements
-
-Possible future enhancements include:
-
-- Director Analytics
-- Cast Analytics
-- Recommendation System
-- World Map Visualization
-- Advanced Search & Sorting
-- Dashboard Performance Optimization
-
----
-
-# 👨‍💻 Author
-
-**Tarun Bagga**
-
-- GitHub: https://github.com/Tarun-Bagga
-
----
-
-## ⭐ Support
-
-If you found this project useful, consider giving it a ⭐ on GitHub.
+**Tarun Bagga** — [GitHub](https://github.com/Tarun-Bagga)
