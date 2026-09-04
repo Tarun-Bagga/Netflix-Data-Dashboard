@@ -59,6 +59,7 @@ Netflix-Data-Dashboard/
 ├── analysis.py
 ├── requirements.txt
 ├── README.md
+├── LICENSE
 ├── .gitignore
 ├── data/
 │   └── netflix_titles.csv
@@ -105,3 +106,7 @@ Netflix Movies and TV Shows dataset — title, type, director, cast, country, re
 ## Author
 
 **Tarun Bagga** — [GitHub](https://github.com/Tarun-Bagga)
+
+## License
+
+This project is licensed under the MIT License.
